@@ -1,0 +1,3 @@
+/Users/adrianmartinez/git-repos/library-system/build/CMakeFiles/tests.dir
+/Users/adrianmartinez/git-repos/library-system/build/CMakeFiles/edit_cache.dir
+/Users/adrianmartinez/git-repos/library-system/build/CMakeFiles/rebuild_cache.dir

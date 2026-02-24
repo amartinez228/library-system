@@ -9,7 +9,7 @@ struct library_card_info
 	int age, phoneNum;
 };
 
-void new_lib_card(struct library_card_info *x);
+void new_lib_card(struct library_card_info **x);
 void check_availability();
 void checkout();
 
@@ -18,6 +18,7 @@ int main(int argc, char* argv[])
 	int option;
 	struct library_card_info *city = NULL; //we should be setting this to null initally bc we dont know if they want it yet
 	struct library_card_info **ptr = NULL; //redo logic b/c we are using dbl ptr now
+        struct
 	puts("Hey there welcome to our community library how can I help you");
 	puts("1) getting a library card\n2)Checking Avaiablility\n3)Checking something out");
 	scanf("%d", &option);
@@ -38,7 +39,7 @@ int main(int argc, char* argv[])
 }
 
 //function to add get information for the library card move from main
-void new_lib_card(struct library_card_info *x)
+void new_lib_card(struct library_card_info **x)
 {
 	char cont;
 	int struct_ptr_count = 0;
