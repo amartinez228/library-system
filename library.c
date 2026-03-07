@@ -34,7 +34,7 @@ int dlist_ins_next(DList *list, DListElmt *element, const void *data) {
     list->head->next = NULL;
     list->tail = new_element;
   } else {
-    new_element->next = element->next;
+    new_element->next = element;
     new_element->next = element;
     if (element->next == NULL)
       list->tail = new_element;
@@ -91,16 +91,75 @@ int dlist_remove(DList *list, DListElmt *element, void **data) {
   return 0;
 }
 
-typedef struct LibraryCard_ {
-  char name[50];
-  char address[100];
-  int phoneNumber;
-} LibraryCard;
+int cardFillout(struct libraryCard *x) {
+  puts("So you'd like to apply for a card.");
+  puts("Alright but first we need your name");
+  scanf("%s", x->name);
+  puts("Alirghty and we need an address on file");
+  scanf("%s", x->address);
+  puts("And finally a phone number");
+  scanf("%d", x->phoneNumber);
+  return 0;
+}
+int printCardInfo(struct libraryCard *x) {
+  printf("Alight here we have the name: %s\n", x->name);
+  printf("And here we have the address: %s\n", x->address);
+  printf("And finally we have the phoneNumber: %d", x->phoneNumber);
+  return 0;
+}
+int who_are_you(struct libraryCard *x) {
+  printf("This is the list of everyone with a libraryCard: %s\n", x->name);
+  return 0;
+}
 
+// still need to implement dlist_head and dlist_tail
 int main(int argc, char *argv[]) {
+  DList list;
+  dlist_init(&list, NULL); // we set destroy to null b/c it should not be freed
   int i = 0;
+  int options;
   while (!i) {
-    puts("Would you like to continue [y=0/n=1");
-    scanf("%d", &i);
+    printf("Hello there how can I help you today\n1)Get a new "
+           "card\n2)printCardInfo\n3)No just leaving");
+    scanf("%d", &options);
+    switch (options) {
+    case 1:
+      // first we will allocate our Dlist element then we have to set the
+      // pointer to point at a new libraryCard struct
+      DListElmt *new_elmt = malloc(sizeof(DListElmt));
+      if (new_elmt->data != NULL)
+        perror("Malloc for the new Doubly linked list failed");
+      exit(EXIT_FAILURE);
+      new_elmt->data = malloc(sizeof(libraryCard));
+      if (new_elmt->data == NULL) {
+        perror("malloc failed");
+        exit(EXIT_FAILURE);
+        cardFillout(new_elmt->data);
+        if (dlist_ins_next(&list, NULL, new_elmt) != 0) {
+          perror("Insertion to list failed");
+          free(new_elmt->data);
+          exit(EXIT_FAILURE);
+        }
+      }
+      break;
+    case 2:
+      if (list.size != 0) {
+        for (int i = 0; i < list.size; i++) {
+          // function call to get printed out information
+          printf("Alright %s has a libraryCard\n", list.head->data->name);
+        }
+        break;
+      } else {
+        printf("It looks like no one has any library cards");
+        break;
+      }
+    case 3:
+      puts("Alirght thank you please come again");
+      break;
+    default:
+      puts("Invalid option");
+      exit(EXIT_FAILURE);
+    }
   }
+  exit(EXIT_SUCCESS);
 }
