@@ -9,7 +9,7 @@ typedef struct libraryCard {
 } libraryCard;
 
 typedef struct DListElmt_ {
-  libraryCard *data;
+  void *data;
   struct DListElmt_ *prev;
   struct DListElmt_ *next;
 } DListElmt;

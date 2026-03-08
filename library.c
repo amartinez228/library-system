@@ -1,4 +1,5 @@
 #include "dlist.h"
+#include <cstdlib>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -111,7 +112,27 @@ int who_are_you(struct libraryCard *x) {
   printf("This is the list of everyone with a libraryCard: %s\n", x->name);
   return 0;
 }
-
+int get_new_card(DList *list) {
+  // first we allocate our dlist emelent then we set
+  // the pointer to point at a new libraryCard struct
+  DListElmt *new_elmt = malloc(sizeof(DListElmt));
+  if (new_elmt->data != NULL) {
+    perror("Malloc for the new doubly linked list failed");
+    exit(EXIT_FAILURE);
+    new_elmt->data = malloc(sizeof(libraryCard));
+    if (new_elmt->data == NULL) {
+      perror("Malloc failed");
+      exit(EXIT_FAILURE);
+    }
+    cardFillout(new_elmt->data);
+    if (dlist_ins_next(list, NULL, new_elmt) != 0) {
+      perror("Insertion to list failed");
+      free(new_elmt->data);
+      exit(EXIT_FAILURE);
+    }
+  }
+  return 0;
+}
 // still need to implement dlist_head and dlist_tail
 int main(int argc, char *argv[]) {
   DList list;
@@ -120,38 +141,19 @@ int main(int argc, char *argv[]) {
   int options;
   while (!i) {
     printf("Hello there how can I help you today\n1)Get a new "
-           "card\n2)printCardInfo\n3)No just leaving");
+           "card\n2)printCardInfo\n");
     scanf("%d", &options);
     switch (options) {
     case 1:
-      // first we will allocate our Dlist element then we have to set the
-      // pointer to point at a new libraryCard struct
-      DListElmt *new_elmt = malloc(sizeof(DListElmt));
-      if (new_elmt->data != NULL)
-        perror("Malloc for the new Doubly linked list failed");
-      exit(EXIT_FAILURE);
-      new_elmt->data = malloc(sizeof(libraryCard));
-      if (new_elmt->data == NULL) {
-        perror("malloc failed");
-        exit(EXIT_FAILURE);
-        cardFillout(new_elmt->data);
-        if (dlist_ins_next(&list, NULL, new_elmt) != 0) {
-          perror("Insertion to list failed");
-          free(new_elmt->data);
-          exit(EXIT_FAILURE);
-        }
-      }
+      get_new_card(&list);
       break;
-    case 2:
-      if (list.size != 0) {
-        for (int i = 0; i < list.size; i++) {
-          // function call to get printed out information
-          printf("Alright %s has a libraryCard\n", list.head->data->name);
-        }
-        break;
-      } else {
-        printf("It looks like no one has any library cards");
-        break;
+    case 2: // we need an if statement to check we are the head then using .next
+            // we can continue
+      //
+
+      for (int i = 0; i < list.size; i++) {
+        // function call to get printed out information
+        // printf("Alright %s has a libraryCard", list.head->data->name);
       }
     case 3:
       puts("Alirght thank you please come again");
